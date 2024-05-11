@@ -30,6 +30,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	static int x[3], y[3],w,h;
 	static int count = 0;
 	int  iPixelFormat;
+	SetTimer(hwnd, 1, 100, NULL);
 	switch (m)
 	{
 	case WM_CREATE:
@@ -67,6 +68,20 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 			count = 0;
 		}
 		else count++;	
+		break;
+	case WM_TIMER:
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glRotated(10, 0, 0, 1);
+		glBegin(GL_TRIANGLES);
+		glColor3f(1, 0, 0); glVertex2d(0, 0);
+		glColor3f(1, 0, 0); glVertex2d(-0.3, 0.3);
+		glColor3f(1, 0, 0); glVertex2d(0.3, 0.3);
+
+		glEnd();
+		glFlush();
+		SwapBuffers(hdc);
+
 		break;
 	case WM_DESTROY:
 		wglMakeCurrent(NULL, NULL);
