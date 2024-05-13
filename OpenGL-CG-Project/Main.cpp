@@ -3,6 +3,73 @@
 #include <gl/GLU.h>
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
+
+void drawTriangle() {
+	glBegin(GL_TRIANGLES);
+	glColor3f(0, 0, 1); glVertex2d(0, 0.3);
+	glColor3f(0, 0, 1); glVertex2d(-0.3, -0.3);
+	glColor3f(0, 0, 1); glVertex2d(0.3, -0.3);
+	glEnd();
+}
+
+void drawCube() {
+	glBegin(GL_QUADS);
+
+	// Front face
+	glColor3f(1.0f, 0.0f, 0.0f); // Red color
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	glColor3f(0.0f, 1.0f, 0.0f); // Green color
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+
+	// Top face
+	glColor3f(0.0f, 0.0f, 1.0f); // Blue color
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+
+	// Bottom face
+	glColor3f(1.0f, 1.0f, 0.0f); // Yellow color
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+
+	// Right face
+	glColor3f(1.0f, 0.0f, 1.0f); // Magenta color
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+
+	// Left face
+	glColor3f(0.0f, 1.0f, 1.0f); // Cyan color
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	glEnd();
+}
+
+void drawLand() {
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0f); // Red color
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+}
+
 LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 {
 	static PIXELFORMATDESCRIPTOR pfd = {
@@ -30,7 +97,8 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	static int x[3], y[3],w,h;
 	static int count = 0;
 	int  iPixelFormat;
-	SetTimer(hwnd, 1, 100, NULL);
+	static double theta = 1;
+	SetTimer(hwnd, 1, 10, NULL);
 	switch (m)
 	{
 	case WM_CREATE:
@@ -50,38 +118,28 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glFlush();
 		SwapBuffers(hdc);
 		break;
-	case WM_LBUTTONDOWN:
-		x[count] = LOWORD(lp);
-		y[count] = HIWORD(lp);
-		if (count == 2)
-		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glBegin(GL_TRIANGLES);
-			glColor3f(1, 0, 0);
-			glVertex2d(2.0 * x[0] / w - 1, 1 - 2.0 * y[0] / h);
-			glColor3f(0, 1, 0);
-			glVertex2d(2.0 * x[1] / w - 1, 1 - 2.0 * y[1] / h);
-			glColor3f(0, 0, 1);
-			glVertex2d(2.0 * x[2] / w - 1, 1 - 2.0 * y[2] / h);
-			glEnd();
-			glFlush();
-			SwapBuffers(hdc);
-			count = 0;
-		}
-		else count++;	
+	case WM_LBUTTONDOWN:	
 		break;
 	case WM_TIMER:
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glRotated(10, 0, 0, 1);
-		glBegin(GL_TRIANGLES);
-		glColor3f(1, 0, 0); glVertex2d(0, 0);
-		glColor3f(1, 0, 0); glVertex2d(-0.3, 0.3);
-		glColor3f(1, 0, 0); glVertex2d(0.3, 0.3);
 
-		glEnd();
+		glLoadIdentity();
+		glRotated(theta, 0, 0, 1);
+		glPushMatrix();
+		glRotated(70, 1, 0, 0);
+		drawLand();
+		glPopMatrix();
+
+		glLoadIdentity();
+		glPushMatrix();
+		drawTriangle();
+		glPopMatrix();
+
 		glFlush();
 		SwapBuffers(hdc);
+
+		theta+= 1;
 
 		break;
 	case WM_DESTROY:
@@ -108,9 +166,10 @@ int APIENTRY WinMain(HINSTANCE hi, HINSTANCE pi, LPSTR c, int ns)
 	wc.lpszMenuName = NULL;
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	RegisterClass(&wc);
-	HWND hwnd = CreateWindow(L"MyClass", L"Hello World", WS_OVERLAPPEDWINDOW, 0, 0, 600, 400, NULL, NULL, hi, 0);
+	HWND hwnd = CreateWindow(L"MyClass", L"Computer Graphics", WS_OVERLAPPEDWINDOW, 0, 0, 1000, 800, NULL, NULL, hi, 0);
 	ShowWindow(hwnd, ns);
 	UpdateWindow(hwnd);
+	SendMessage(hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0) > 0)
 	{
