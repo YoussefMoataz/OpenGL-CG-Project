@@ -125,8 +125,8 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
-		glRotated(theta, 0, 0, 1);
 		glPushMatrix();
+		glRotated(theta, 0, 0, 1);
 		glRotated(70, 1, 0, 0);
 		drawLand();
 		glPopMatrix();
