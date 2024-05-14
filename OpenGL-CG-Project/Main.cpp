@@ -1,16 +1,9 @@
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include <math.h>
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
-
-void drawTriangle() {
-	glBegin(GL_TRIANGLES);
-	glColor3f(0, 0, 1); glVertex2d(0, 0.3);
-	glColor3f(0, 0, 1); glVertex2d(-0.3, -0.3);
-	glColor3f(0, 0, 1); glVertex2d(0.3, -0.3);
-	glEnd();
-}
 
 void drawCube() {
 	glBegin(GL_QUADS);
@@ -62,12 +55,114 @@ void drawCube() {
 
 void drawLand() {
 	glBegin(GL_QUADS);
-	glColor3f(1.0f, 0.0f, 0.0f); // Red color
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex3f(-3.5f, -3.5f, 0.5f);
+	glVertex3f(3.5f, -3.5f, 0.5f);
+	glVertex3f(3.5f, 3.5f, 0.5f);
+	glVertex3f(-3.5f, 3.5f, 0.5f);
 	glEnd();
+}
+
+void drawAxes() {
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0); glVertex3f(0, 0, 0); glVertex3f(10, 0, 0);
+	glColor3f(0, 1, 0); glVertex3f(0, 0, 0); glVertex3f(0, 10, 0);
+	glColor3f(0, 0, 1); glVertex3f(0, 0, 0); glVertex3f(0, 0, 10);
+	glEnd();
+}
+
+void drawWheel(float radius, float depth, int segments) {
+	glBegin(GL_QUAD_STRIP);
+	glColor3f(0, 0, 0);
+	for (int i = 0; i <= segments; ++i) {
+		float angle = (2.0f * 3.14159f / segments) * i;
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
+		glVertex3f(x, y, 0);
+		glVertex3f(x, y, depth);
+	}
+	glEnd();
+}
+void drawRectangle(int x, int  y, int z, float width, float height, float depth) {
+	glBegin(GL_QUADS);
+
+	// Front face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y + height, z);
+	glVertex3f(x, y + height, z);
+
+	// Back face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z - depth);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x, y + height, z - depth);
+
+	// Top face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y + height, z);
+	glVertex3f(x + width, y + height, z);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x, y + height, z - depth);
+
+	// Bottom face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x, y, z - depth);
+
+	// Left face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x, y, z - depth);
+	glVertex3f(x, y + height, z - depth);
+	glVertex3f(x, y + height, z);
+
+	// Right face
+	glColor3f(0, 0, 0);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x + width, y + height, z);
+	glEnd();
+}
+void drawBike(int x, int y, int z, int w, int h) {
+	//back wheel
+	glPushMatrix();
+	glTranslatef(x-0.5, y, z);
+	drawWheel(0.2, 0.05f, 100);
+	glPopMatrix();
+	//front wheel
+	glPushMatrix();
+	glTranslatef(x + 0.5, y, z);
+	drawWheel(0.2, 0.05f, 100);
+	glPopMatrix();
+	//draw body
+	glPushMatrix();
+	glTranslatef(x - 0.75, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 1.5f, 0.1f, 0.06f);
+	glPopMatrix();
+	//draw hand
+	glPushMatrix();
+	glTranslatef(x + 0.6, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 0.01f, 0.5f, 0.06f);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(x + 0.6, y + 0.6, z + 0.125f);
+	drawRectangle(0, 0, 0, 0.05f, 0.06f, 0.25f);
+	glPopMatrix();
+	//draw seat
+	glPushMatrix();
+	glTranslatef(x + 0.1, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 0.01f, 0.3f, 0.06f);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(x, y + 0.45, z + 0.07f);
+	drawRectangle(0, 0, 0, 0.2f, 0.06f, 0.15f);
+	glPopMatrix();
 }
 
 LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
@@ -92,12 +187,24 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	0,                     // reserved  
 	0, 0, 0                // layer masks ignored  
 	};
+
 	static HDC hdc;
 	static HGLRC hgl;
-	static int x[3], y[3],w,h;
-	static int count = 0;
 	int  iPixelFormat;
+	static int w,h;
+
+	static double x = 8, y = 8, z = 8;
+
+	static double landScale = 3;
+
+	static double buildingScale = 4;
+
+	static double bikeScale = 2;
 	static double theta = 1;
+	static double bikeRadius = 3;
+	static int bikeDirection = 1;
+	static bool isBikeMoving = false;
+
 	SetTimer(hwnd, 1, 10, NULL);
 	switch (m)
 	{
@@ -107,7 +214,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		SetPixelFormat(hdc, iPixelFormat, &pfd);
 		hgl=wglCreateContext(hdc);
 		wglMakeCurrent(hdc,hgl);
-		glClearColor(0, 0, 0, 0);
+		glClearColor(0, 0.75, 0, 0);
 		break;
 	case WM_SIZE:
 		w = LOWORD(lp);
@@ -118,29 +225,109 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glFlush();
 		SwapBuffers(hdc);
 		break;
-	case WM_LBUTTONDOWN:	
-		break;
 	case WM_TIMER:
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
+		gluPerspective(60.0, 16.0 / 9.0, 1, 50);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(x, y, z, 0, 0, 0, 0, 1, 0);
+
+		drawAxes();
+
 		glPushMatrix();
-		glRotated(theta, 0, 0, 1);
-		glRotated(70, 1, 0, 0);
+		glRotated(90, 1, 0, 0);
+		glScaled(landScale, landScale, landScale);
 		drawLand();
 		glPopMatrix();
 
-		glLoadIdentity();
 		glPushMatrix();
-		drawTriangle();
+		glScaled(buildingScale, buildingScale, buildingScale);
+		//glRotated(theta, 0, 1, 0);
+		// draw building
+		drawCube();
+		glPopMatrix();
+
+		glPushMatrix();
+		glScaled(bikeScale, bikeScale, bikeScale);
+		glRotated(theta, 0, 1, 0);
+		glTranslated(-bikeRadius, 0, 0);
+		glRotated(-90, 0, 1, 0);
+		drawBike(0, 0, 0, w, h);
 		glPopMatrix();
 
 		glFlush();
 		SwapBuffers(hdc);
 
-		theta+= 1;
+		if (isBikeMoving) {
+			theta += bikeDirection;
+		}
 
+		break;
+	case WM_KEYDOWN:
+	{
+		if (GetKeyState('0') & GetKeyState(VK_CONTROL) & 0x8000) {
+			x = y = z = 8;
+		}
+		else if (wp == VK_UP)
+		{
+			if (GetKeyState(VK_SHIFT) & 0x8000)
+			{
+				y += 1.0;
+			}
+			else
+			{
+				z += 0.1;
+			}
+		}
+		else if (wp == VK_DOWN)
+		{
+			if (GetKeyState(VK_SHIFT) & 0x8000)
+			{
+				y -= 1.0;
+			}
+			else
+			{
+				z -= 0.1;
+			}
+		}
+		else if (wp == VK_RIGHT)
+		{
+			x += 0.1;
+		}
+		else if (wp == VK_LEFT)
+		{
+			x -= 0.1;
+		}
+		else if (GetKeyState('F') & 0x8000)
+		{
+			bikeDirection = 1;
+		}
+		else if (GetKeyState('B') & 0x8000)
+		{
+			bikeDirection = -1;
+		}
+		else if (GetKeyState('L') & 0x8000)
+		{
+			if (bikeRadius > 1.7) {
+				bikeRadius -= 0.1;
+			}
+		}
+		else if (GetKeyState('R') & 0x8000)
+		{
+			bikeRadius += 0.1;
+		}
+		break;
+	}
+	case WM_LBUTTONDOWN:
+		isBikeMoving = true;
+		break;
+	case WM_RBUTTONDOWN:
+		isBikeMoving = false;
 		break;
 	case WM_DESTROY:
 		wglMakeCurrent(NULL, NULL);
