@@ -5,6 +5,120 @@
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
 
+void drawAxes() {
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0); glVertex3f(0, 0, 0); glVertex3f(10, 0, 0);
+	glColor3f(0, 1, 0); glVertex3f(0, 0, 0); glVertex3f(0, 10, 0);
+	glColor3f(0, 0, 1); glVertex3f(0, 0, 0); glVertex3f(0, 0, 10);
+	glEnd();
+}
+
+void drawLand() {
+	glBegin(GL_QUADS);
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex3f(-3.5f, -3.5f, 0.5f);
+	glVertex3f(3.5f, -3.5f, 0.5f);
+	glVertex3f(3.5f, 3.5f, 0.5f);
+	glVertex3f(-3.5f, 3.5f, 0.5f);
+	glEnd();
+}
+
+void drawWheel(float radius, float depth, int segments) {
+	glBegin(GL_QUAD_STRIP);
+	glColor3f(0, 0, 0);
+	for (int i = 0; i <= segments; ++i) {
+		float angle = (2.0f * 3.14159f / segments) * i;
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
+		glVertex3f(x, y, 0);
+		glVertex3f(x, y, depth);
+	}
+	glEnd();
+}
+
+void drawRectangle(int x, int  y, int z, float width, float height, float depth) {
+	glBegin(GL_QUADS);
+
+	// Front face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y + height, z);
+	glVertex3f(x, y + height, z);
+
+	// Back face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z - depth);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x, y + height, z - depth);
+
+	// Top face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y + height, z);
+	glVertex3f(x + width, y + height, z);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x, y + height, z - depth);
+
+	// Bottom face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x, y, z - depth);
+
+	// Left face
+	glColor3f(0, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x, y, z - depth);
+	glVertex3f(x, y + height, z - depth);
+	glVertex3f(x, y + height, z);
+
+	// Right face
+	glColor3f(0, 0, 0);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y, z - depth);
+	glVertex3f(x + width, y + height, z - depth);
+	glVertex3f(x + width, y + height, z);
+	glEnd();
+}
+
+void drawBike(int x, int y, int z, int w, int h) {
+	//back wheel
+	glPushMatrix();
+	glTranslatef(x-0.5, y, z);
+	drawWheel(0.2, 0.05f, 100);
+	glPopMatrix();
+	//front wheel
+	glPushMatrix();
+	glTranslatef(x + 0.5, y, z);
+	drawWheel(0.2, 0.05f, 100);
+	glPopMatrix();
+	//draw body
+	glPushMatrix();
+	glTranslatef(x - 0.75, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 1.5f, 0.1f, 0.06f);
+	glPopMatrix();
+	//draw hand
+	glPushMatrix();
+	glTranslatef(x + 0.6, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 0.01f, 0.5f, 0.06f);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(x + 0.6, y + 0.6, z + 0.125f);
+	drawRectangle(0, 0, 0, 0.05f, 0.06f, 0.25f);
+	glPopMatrix();
+	//draw seat
+	glPushMatrix();
+	glTranslatef(x + 0.1, y + 0.15, z + 0.05f);
+	drawRectangle(0, 0, 0, 0.01f, 0.3f, 0.06f);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(x, y + 0.45, z + 0.07f);
+	drawRectangle(0, 0, 0, 0.2f, 0.06f, 0.15f);
+	glPopMatrix();
+}
+
 void drawCube() {
 	glBegin(GL_QUADS);
 
@@ -53,116 +167,115 @@ void drawCube() {
 	glEnd();
 }
 
-void drawLand() {
+void drawRoof() {
 	glBegin(GL_QUADS);
-	glColor3f(0.5, 0.5, 0.5);
-	glVertex3f(-3.5f, -3.5f, 0.5f);
-	glVertex3f(3.5f, -3.5f, 0.5f);
-	glVertex3f(3.5f, 3.5f, 0.5f);
-	glVertex3f(-3.5f, 3.5f, 0.5f);
-	glEnd();
-}
-
-void drawAxes() {
-	glBegin(GL_LINES);
-	glColor3f(1, 0, 0); glVertex3f(0, 0, 0); glVertex3f(10, 0, 0);
-	glColor3f(0, 1, 0); glVertex3f(0, 0, 0); glVertex3f(0, 10, 0);
-	glColor3f(0, 0, 1); glVertex3f(0, 0, 0); glVertex3f(0, 0, 10);
-	glEnd();
-}
-
-void drawWheel(float radius, float depth, int segments) {
-	glBegin(GL_QUAD_STRIP);
-	glColor3f(0, 0, 0);
-	for (int i = 0; i <= segments; ++i) {
-		float angle = (2.0f * 3.14159f / segments) * i;
-		float x = radius * cos(angle);
-		float y = radius * sin(angle);
-		glVertex3f(x, y, 0);
-		glVertex3f(x, y, depth);
-	}
-	glEnd();
-}
-void drawRectangle(int x, int  y, int z, float width, float height, float depth) {
-	glBegin(GL_QUADS);
-
-	// Front face
-	glColor3f(0, 0, 0);
-	glVertex3f(x, y, z);
-	glVertex3f(x + width, y, z);
-	glVertex3f(x + width, y + height, z);
-	glVertex3f(x, y + height, z);
-
-	// Back face
-	glColor3f(0, 0, 0);
-	glVertex3f(x, y, z - depth);
-	glVertex3f(x + width, y, z - depth);
-	glVertex3f(x + width, y + height, z - depth);
-	glVertex3f(x, y + height, z - depth);
-
-	// Top face
-	glColor3f(0, 0, 0);
-	glVertex3f(x, y + height, z);
-	glVertex3f(x + width, y + height, z);
-	glVertex3f(x + width, y + height, z - depth);
-	glVertex3f(x, y + height, z - depth);
-
 	// Bottom face
-	glColor3f(0, 0, 0);
-	glVertex3f(x, y, z);
-	glVertex3f(x + width, y, z);
-	glVertex3f(x + width, y, z - depth);
-	glVertex3f(x, y, z - depth);
-
-	// Left face
-	glColor3f(0, 0, 0);
-	glVertex3f(x, y, z);
-	glVertex3f(x, y, z - depth);
-	glVertex3f(x, y + height, z - depth);
-	glVertex3f(x, y + height, z);
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
 
 	// Right face
-	glColor3f(0, 0, 0);
-	glVertex3f(x + width, y, z);
-	glVertex3f(x + width, y, z - depth);
-	glVertex3f(x + width, y + height, z - depth);
-	glVertex3f(x + width, y + height, z);
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+
+	// Left face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Front face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glEnd();
 }
-void drawBike(int x, int y, int z, int w, int h) {
-	//back wheel
+
+void drawSeparator() {
+	glBegin(GL_QUADS);
+	// Right face
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+
+	// Left face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Front face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	//glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glEnd();
+}
+
+void drawBuilding() {
+	static double theta = 0;
+	// first floor
+	//glLoadIdentity();
 	glPushMatrix();
-	glTranslatef(x-0.5, y, z);
-	drawWheel(0.2, 0.05f, 100);
+	glRotated(theta, 0, 1, 0);
+	glScaled(0.25f, 0.25f, 0.25f);
+	drawCube();
 	glPopMatrix();
-	//front wheel
+
+	// separator
+	//glLoadIdentity();
 	glPushMatrix();
-	glTranslatef(x + 0.5, y, z);
-	drawWheel(0.2, 0.05f, 100);
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.14f, 0.0f);
+	glScaled(0.25f, 0.03f, 0.25f);
+	drawSeparator();
 	glPopMatrix();
-	//draw body
+
+	// second floor
+	//glLoadIdentity();
 	glPushMatrix();
-	glTranslatef(x - 0.75, y + 0.15, z + 0.05f);
-	drawRectangle(0, 0, 0, 1.5f, 0.1f, 0.06f);
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.28f, 0.0f);
+	glScaled(0.25f, 0.25f, 0.25f);
+	drawCube();
 	glPopMatrix();
-	//draw hand
+
+	// roof
+	//glLoadIdentity();
 	glPushMatrix();
-	glTranslatef(x + 0.6, y + 0.15, z + 0.05f);
-	drawRectangle(0, 0, 0, 0.01f, 0.5f, 0.06f);
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.45f, 0.0f);
+	glScaled(0.25f, 0.1f, 0.25f);
+	drawRoof();
 	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(x + 0.6, y + 0.6, z + 0.125f);
-	drawRectangle(0, 0, 0, 0.05f, 0.06f, 0.25f);
-	glPopMatrix();
-	//draw seat
-	glPushMatrix();
-	glTranslatef(x + 0.1, y + 0.15, z + 0.05f);
-	drawRectangle(0, 0, 0, 0.01f, 0.3f, 0.06f);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(x, y + 0.45, z + 0.07f);
-	drawRectangle(0, 0, 0, 0.2f, 0.06f, 0.15f);
-	glPopMatrix();
+
+	//theta += 1;
 }
 
 LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
@@ -193,11 +306,12 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	int  iPixelFormat;
 	static int w,h;
 
-	static double x = 8, y = 8, z = 8;
+	static double x0 = 10, y0 = 11, z0 = 10;
+	static double x = 0, y = 0, z = 0;
 
 	static double landScale = 3;
 
-	static double buildingScale = 4;
+	static double buildingScale = 10;
 
 	static double bikeScale = 2;
 	static double theta = 1;
@@ -224,6 +338,11 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glEnable(GL_DEPTH_TEST);
 		glFlush();
 		SwapBuffers(hdc);
+
+		x = x0;
+		y = y0;
+		z = z0;
+
 		break;
 	case WM_TIMER:
 
@@ -237,25 +356,26 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glLoadIdentity();
 		gluLookAt(x, y, z, 0, 0, 0, 0, 1, 0);
 
-		drawAxes();
+		//drawAxes();
 
 		glPushMatrix();
 		glRotated(90, 1, 0, 0);
 		glScaled(landScale, landScale, landScale);
+		glTranslated(0, 0, -0.5);
 		drawLand();
 		glPopMatrix();
 
 		glPushMatrix();
 		glScaled(buildingScale, buildingScale, buildingScale);
-		//glRotated(theta, 0, 1, 0);
-		// draw building
-		drawCube();
+		glTranslated(0, 0.125, 0);
+		drawBuilding();
 		glPopMatrix();
 
 		glPushMatrix();
 		glScaled(bikeScale, bikeScale, bikeScale);
 		glRotated(theta, 0, 1, 0);
 		glTranslated(-bikeRadius, 0, 0);
+		glTranslated(0, 0.2, 0);
 		glRotated(-90, 0, 1, 0);
 		drawBike(0, 0, 0, w, h);
 		glPopMatrix();
@@ -271,7 +391,9 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	case WM_KEYDOWN:
 	{
 		if (GetKeyState('0') & GetKeyState(VK_CONTROL) & 0x8000) {
-			x = y = z = 8;
+			x = x0;
+			y = y0;
+			z = z0;
 		}
 		else if (wp == VK_UP)
 		{
