@@ -60,6 +60,77 @@ void drawCube() {
 	glEnd();
 }
 
+void drawRoof() {
+	glBegin(GL_QUADS);
+	// Bottom face
+	glColor3f(0.5f, 0.5f, 0.5f); 
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+
+	// Right face
+	glColor3f(0.5f, 0.5f, 0.5f); 
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+
+	// Left face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Front face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glEnd();
+}
+
+void drawSeparator() {
+	glBegin(GL_QUADS);
+	// Right face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+
+	// Left face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Front face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glEnd();
+}
+
 void drawLand() {
 	glBegin(GL_QUADS);
 	glColor3f(1.0f, 0.0f, 0.0f); // Red color
@@ -68,6 +139,43 @@ void drawLand() {
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glEnd();
+}
+
+void drawBuilding() {
+	static double theta = 1;
+	// first floor
+	glLoadIdentity();
+	glPushMatrix();
+	glRotated(theta, 0, 1, 0);
+	glScaled(0.25f, 0.25f, 0.25f);
+	drawCube();
+	glPopMatrix();
+	// separator
+	glLoadIdentity();
+	glPushMatrix();
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.14f, 0.0f);
+	glScaled(0.25f, 0.03f, 0.25f);
+	drawSeparator();
+	glPopMatrix();
+	// second floor
+	glLoadIdentity();
+	glPushMatrix();
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.28f, 0.0f);
+	glScaled(0.25f, 0.25f, 0.25f);
+	drawCube();
+	glPopMatrix();
+	// roof
+	glLoadIdentity();
+	glPushMatrix();
+	glRotated(theta, 0, 1, 0);
+	glTranslated(0.0f, 0.45f, 0.0f);
+	glScaled(0.25f, 0.1f, 0.25f);
+	drawRoof();
+	glPopMatrix();
+
+	theta += 1;
 }
 
 LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
@@ -124,7 +232,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glLoadIdentity();
+		/*glLoadIdentity();
 		glPushMatrix();
 		glRotated(theta, 0, 0, 1);
 		glRotated(70, 1, 0, 0);
@@ -134,8 +242,9 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glLoadIdentity();
 		glPushMatrix();
 		drawTriangle();
-		glPopMatrix();
-
+		glPopMatrix();*/
+		drawBuilding();
+		
 		glFlush();
 		SwapBuffers(hdc);
 
