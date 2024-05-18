@@ -238,7 +238,7 @@ void drawSeparator() {
 	glEnd();
 }
 
-void drawBuilding(int theta) {
+void drawBuilding(int theta1, int theta2) {
 	//static double theta = 0;
 	// first floor
 	//glLoadIdentity();
@@ -250,12 +250,7 @@ void drawBuilding(int theta) {
 	glPushMatrix();
 	glTranslated(0.51, -0.5, 0.1);
 	glRotated(90, 0, 1, 0);
-	if (theta <= 160) {
-		glRotated(-theta, 0, 1, 0);
-	}
-	else {
-		glRotated(-160, 0, 1, 0);
-	}
+	glRotated(-theta1, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.25, 0.65, 0.0, (float) 150 / 255, (float) 75 / 255, 0);
 	glPopMatrix();
 	
@@ -268,24 +263,14 @@ void drawBuilding(int theta) {
 	glPushMatrix();
 	glTranslated(0.1, 0, 0);
 	glRotated(180, 0, 1, 0);
-	if (theta <= 160) {
-		glRotated(theta, 0, 1, 0);
-	}
-	else {
-		glRotated(160, 0, 1, 0);
-	}
+	glRotated(theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
 	
 	// left window matrix
 	glPushMatrix();
 	glTranslated(-0.5, 0, 0);
-	if (theta <= 160) {
-		glRotated(-theta, 0, 1, 0);
-	}
-	else {
-		glRotated(-160, 0, 1, 0);
-	}
+	glRotated(-theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
 	
@@ -316,24 +301,14 @@ void drawBuilding(int theta) {
 	glPushMatrix();
 	glTranslated(0.25, 0.2, 0.51);
 	glRotated(180, 0, 1, 0);
-	if (theta <= 160) {
-		glRotated(theta, 0, 1, 0);
-	}
-	else {
-		glRotated(160, 0, 1, 0);
-	}
+	glRotated(theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
 	
 	// left window
 	glPushMatrix();
 	glTranslated(-0.30, 0.2, 0.51);
-	if (theta <= 160) {
-		glRotated(-theta, 0, 1, 0);
-	}
-	else {
-		glRotated(-160, 0, 1, 0);
-	}
+	glRotated(-theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
 	
@@ -386,9 +361,15 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	static double landScale = 3;
 
 	static double buildingScale = 12;
+	static int buildingDoorTheta = 0;
+	static int buildingDoorDirection = 1;
+	static int buildingWindowsTheta = 0;
+	static int buildingWindowsDirection = 1;
+	static bool isBuildingDoorMoving = false;
+	static bool isBuildingWindowsMoving = false;
 
 	static double bikeScale = 1.5;
-	static double theta = 1;
+	static double bikeTheta = 1;
 	static double bikeRadius = 3;
 	static int bikeDirection = 1;
 	static bool isBikeMoving = false;
@@ -442,12 +423,13 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glPushMatrix();
 		glScaled(buildingScale, buildingScale, buildingScale);
 		glTranslated(0, 0.125, 0);
-		drawBuilding(0);
+		glRotated(-90, 0, 1, 0);
+		drawBuilding(buildingDoorTheta, buildingWindowsTheta);
 		glPopMatrix();
 
 		glPushMatrix();
 		glScaled(bikeScale, bikeScale, bikeScale);
-		glRotated(theta, 0, 1, 0);
+		glRotated(bikeTheta, 0, 1, 0);
 		glTranslated(-bikeRadius, 0, 0);
 		glTranslated(0, 0.2, 0);
 		glRotated(-90, 0, 1, 0);
@@ -458,7 +440,45 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		SwapBuffers(hdc);
 
 		if (isBikeMoving) {
-			theta += bikeDirection;
+			bikeTheta += bikeDirection;
+		}
+
+		if (isBuildingDoorMoving) {
+			if (buildingDoorTheta >= 0 && buildingDoorTheta <= 160)
+			{
+				buildingDoorTheta += buildingDoorDirection;
+			}
+			else
+			{
+				isBuildingDoorMoving = false;
+				if (buildingDoorTheta < 0)
+				{
+					buildingDoorTheta = 0;
+				}
+				else if (buildingDoorTheta > 160)
+				{
+					buildingDoorTheta = 160;
+				}
+			}
+		}
+
+		if (isBuildingWindowsMoving) {
+			if (buildingWindowsTheta >= 0 && buildingWindowsTheta <= 160)
+			{
+				buildingWindowsTheta += buildingWindowsDirection;
+			}
+			else
+			{
+				isBuildingWindowsMoving = false;
+				if (buildingWindowsTheta < 0)
+				{
+					buildingWindowsTheta = 0;
+				}
+				else if (buildingWindowsTheta > 160)
+				{
+					buildingWindowsTheta = 160;
+				}
+			}
 		}
 
 		break;
@@ -499,23 +519,43 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		{
 			x -= 0.1;
 		}
-		else if (GetKeyState('F') & 0x8000)
+		else if (GetKeyState('L') & 0x8000)
 		{
-			bikeDirection = 1;
+			// 4.a
+		}
+		else if (GetKeyState('R') & 0x8000)
+		{
+			// 4.b
 		}
 		else if (GetKeyState('B') & 0x8000)
-		{
-			bikeDirection = -1;
-		}
-		else if (GetKeyState('L') & 0x8000)
 		{
 			if (bikeRadius > 1.7) {
 				bikeRadius -= 0.1;
 			}
 		}
-		else if (GetKeyState('R') & 0x8000)
+		else if (GetKeyState('F') & 0x8000)
 		{
 			bikeRadius += 0.1;
+		}
+		else if (GetKeyState('O') & 0x8000 & GetKeyState(VK_SHIFT))
+		{
+			isBuildingWindowsMoving = true;
+			buildingWindowsDirection = 1;
+		}
+		else if (GetKeyState('O') & 0x8000)
+		{
+			isBuildingDoorMoving = true;
+			buildingDoorDirection = 1;
+		}
+		else if (GetKeyState('C') & 0x8000 & GetKeyState(VK_SHIFT))
+		{
+			isBuildingWindowsMoving = true;
+			buildingWindowsDirection = -1;
+		}
+		else if (GetKeyState('C') & 0x8000)
+		{
+			isBuildingDoorMoving = true;
+			buildingDoorDirection = -1;
 		}
 		break;
 	}
