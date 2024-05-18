@@ -535,7 +535,9 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		}
 		else if (GetKeyState('F') & 0x8000)
 		{
-			bikeRadius += 0.1;
+			if (bikeRadius < 6) {
+				bikeRadius += 0.1;
+			}
 		}
 		else if (GetKeyState('O') & 0x8000 & GetKeyState(VK_SHIFT))
 		{
