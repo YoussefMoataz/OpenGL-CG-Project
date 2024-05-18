@@ -83,15 +83,17 @@ void drawRectangle(int x, int  y, int z, float width, float height, float depth,
 	glEnd();
 }
 
-void drawBike(int x, int y, int z, int w, int h) {
+void drawBike(int x, int y, int z, int w, int h,int frontWheelAngle,int backWheelAngle) {
 	//back wheel
 	glPushMatrix();
 	glTranslatef(x-0.5, y, z);
+	glRotatef(backWheelAngle, 0, 1, 0);
 	drawWheel(0.2, 0.05f, 100);
 	glPopMatrix();
 	//front wheel
 	glPushMatrix();
 	glTranslatef(x + 0.5, y, z);
+	glRotatef(frontWheelAngle, 0, 1, 0);
 	drawWheel(0.2, 0.05f, 100);
 	glPopMatrix();
 	//draw body
@@ -373,6 +375,8 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	static double bikeRadius = 3;
 	static int bikeDirection = 1;
 	static bool isBikeMoving = false;
+	static int bikeFrontAngle = 0;
+	static int bikeBackAngle = 0;
 
 	SetTimer(hwnd, 1, 10, NULL);
 	switch (m)
@@ -433,7 +437,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glTranslated(-bikeRadius, 0, 0);
 		glTranslated(0, 0.2, 0);
 		glRotated(-90, 0, 1, 0);
-		drawBike(0, 0, 0, w, h);
+		drawBike(0, 0, 0, w, h,bikeFrontAngle,bikeBackAngle);
 		glPopMatrix();
 
 		glFlush();
@@ -521,11 +525,23 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		}
 		else if (GetKeyState('L') & 0x8000)
 		{
-			// 4.a
+			if (bikeFrontAngle == 0) {
+				bikeFrontAngle = 30;
+			}
+			else
+			{
+				bikeFrontAngle = 0;
+			}
 		}
 		else if (GetKeyState('R') & 0x8000)
 		{
-			// 4.b
+			if (bikeBackAngle == 0) {
+				bikeBackAngle = -30;
+			}
+			else
+			{
+				bikeBackAngle = 0;
+			}
 		}
 		else if (GetKeyState('B') & 0x8000)
 		{
