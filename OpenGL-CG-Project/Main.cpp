@@ -311,9 +311,9 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 
 	static double landScale = 3;
 
-	static double buildingScale = 10;
+	static double buildingScale = 12;
 
-	static double bikeScale = 2;
+	static double bikeScale = 1.5;
 	static double theta = 1;
 	static double bikeRadius = 3;
 	static int bikeDirection = 1;
