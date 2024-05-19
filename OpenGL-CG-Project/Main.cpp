@@ -124,7 +124,7 @@ void drawBike(int x, int y, int z, int w, int h,int frontWheelAngle,int backWhee
 void drawCube() {
 	glBegin(GL_QUADS);
 
-	glColor3f(70.0 / 255, 25.0 / 255, 30.0 / 255); // Toob ahmar color
+	glColor3f(70.0 / 255, 25.0 / 255, 30.0 / 255);
 
 	// Front face
 	glVertex3f(-0.5f, -0.5f, 0.5f);
