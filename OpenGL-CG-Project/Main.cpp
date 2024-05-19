@@ -124,6 +124,8 @@ void drawBike(int x, int y, int z, int w, int h, int frontWheelAngle, int backWh
 void drawCube() {
 	glBegin(GL_QUADS);
 
+	glColor3f(70.0 / 255, 25.0 / 255, 30.0 / 255); // Toob ahmar color
+
 	glColor3f(70.0 / 255, 25.0 / 255, 30.0 / 255);
 
 	// Front face
@@ -214,18 +216,21 @@ void drawSeparator() {
 	glVertex3f(0.5f, 0.5f, 0.5f);
 
 	// Left face
+	//glColor3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 
 	// Front face
+	//glColor3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 
 	// Back face
+	//glColor3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glVertex3f(0.5f, 0.5f, -0.5f);
@@ -234,8 +239,11 @@ void drawSeparator() {
 }
 
 void drawBuilding(int theta1, int theta2) {
+	//static double theta = 0;
 	// first floor
+	//glLoadIdentity();
 	glPushMatrix();
+	//glRotated(theta, 0, 1, 0);
 	glScaled(0.25f, 0.25f, 0.25f);
 	drawCube();
 
@@ -271,14 +279,18 @@ void drawBuilding(int theta1, int theta2) {
 	glPopMatrix();
 
 	// separator
+	//glLoadIdentity();
 	glPushMatrix();
+	//glRotated(theta, 0, 1, 0);
 	glTranslated(0.0f, 0.14f, 0.0f);
 	glScaled(0.25f, 0.03f, 0.25f);
 	drawSeparator();
 	glPopMatrix();
 
 	// second floor
+	//glLoadIdentity();
 	glPushMatrix();
+	//glRotated(theta, 0, 1, 0);
 	glTranslated(0.0f, 0.28f, 0.0f);
 	glScaled(0.25f, 0.25f, 0.25f);
 	drawCube();
@@ -306,11 +318,15 @@ void drawBuilding(int theta1, int theta2) {
 	glPopMatrix();
 
 	// roof
+	//glLoadIdentity();
 	glPushMatrix();
+	//glRotated(theta, 0, 1, 0);
 	glTranslated(0.0f, 0.456f, 0.0f);
 	glScaled(0.25f, 0.1f, 0.25f);
 	drawRoof();
 	glPopMatrix();
+
+	//theta += 1;
 }
 
 LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
