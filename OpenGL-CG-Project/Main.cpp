@@ -83,10 +83,10 @@ void drawRectangle(int x, int  y, int z, float width, float height, float depth,
 	glEnd();
 }
 
-void drawBike(int x, int y, int z, int w, int h,int frontWheelAngle,int backWheelAngle) {
+void drawBike(int x, int y, int z, int w, int h, int frontWheelAngle, int backWheelAngle) {
 	//back wheel
 	glPushMatrix();
-	glTranslatef(x-0.5, y, z);
+	glTranslatef(x - 0.5, y, z);
 	glRotatef(backWheelAngle, 0, 1, 0);
 	drawWheel(0.2, 0.05f, 100);
 	glPopMatrix();
@@ -124,43 +124,39 @@ void drawBike(int x, int y, int z, int w, int h,int frontWheelAngle,int backWhee
 void drawCube() {
 	glBegin(GL_QUADS);
 
+	glColor3f(70.0 / 255, 25.0 / 255, 30.0 / 255);
+
 	// Front face
-	glColor3f(0.0f, 0.0f, 0.0f); 
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 
 	// Back face
-	glColor3f(0.0f, 0.0f, 0.0f); 
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glVertex3f(0.5f, 0.5f, -0.5f);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
 
 	// Top face
-	glColor3f(0.0f, 0.0f, 0.0f); 
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 	glVertex3f(0.5f, 0.5f, -0.5f);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
 
 	// Bottom face
-	glColor3f(0.0f, 0.0f, 0.0f); 
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 
 	// Right face
-	glColor3f(0.01f, 0.01f, 0.01f); 
 	glVertex3f(0.5f, -0.5f, 0.5f);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glVertex3f(0.5f, 0.5f, -0.5f);
 	glVertex3f(0.5f, 0.5f, 0.5f);
 
 	// Left face
-	glColor3f(0.01f, 0.01f, 0.01f); 
 	glVertex3f(-0.5f, -0.5f, 0.5f);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glVertex3f(-0.5f, 0.5f, -0.5f);
@@ -242,20 +238,20 @@ void drawBuilding(int theta1, int theta2) {
 	glPushMatrix();
 	glScaled(0.25f, 0.25f, 0.25f);
 	drawCube();
-	
+
 	// door matrix
 	glPushMatrix();
 	glTranslated(0.51, -0.5, 0.1);
 	glRotated(90, 0, 1, 0);
 	glRotated(-theta1, 0, 1, 0);
-	drawRectangle(0, 0, 0, 0.25, 0.65, 0.0, (float) 150 / 255, (float) 75 / 255, 0);
+	drawRectangle(0, 0, 0, 0.25, 0.65, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
-	
+
 	// windows matrix
 	glPushMatrix();
 	glTranslated(0.51, 0.2, -0.2);
 	glRotated(90, 0, 1, 0);
-	
+
 	// right window matrix
 	glPushMatrix();
 	glTranslated(0.1, 0, 0);
@@ -263,14 +259,14 @@ void drawBuilding(int theta1, int theta2) {
 	glRotated(theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
-	
+
 	// left window matrix
 	glPushMatrix();
 	glTranslated(-0.5, 0, 0);
 	glRotated(-theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
-	
+
 	glPopMatrix();
 	glPopMatrix();
 
@@ -286,11 +282,11 @@ void drawBuilding(int theta1, int theta2) {
 	glTranslated(0.0f, 0.28f, 0.0f);
 	glScaled(0.25f, 0.25f, 0.25f);
 	drawCube();
-	
+
 	// windows matrix
 	glPushMatrix();
 	glRotated(90, 0, 1, 0);
-	
+
 	// right window
 	glPushMatrix();
 	glTranslated(0.25, 0.2, 0.51);
@@ -298,14 +294,14 @@ void drawBuilding(int theta1, int theta2) {
 	glRotated(theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
-	
+
 	// left window
 	glPushMatrix();
 	glTranslated(-0.30, 0.2, 0.51);
 	glRotated(-theta2, 0, 1, 0);
 	drawRectangle(0, 0, 0, 0.15, 0.15, 0.0, (float)150 / 255, (float)75 / 255, 0);
 	glPopMatrix();
-	
+
 	glPopMatrix();
 	glPopMatrix();
 
@@ -343,7 +339,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	static HDC hdc;
 	static HGLRC hgl;
 	int  iPixelFormat;
-	static int w,h;
+	static int w, h;
 
 	static double x0 = 10, y0 = 11, z0 = 10;
 	static double x = 0, y = 0, z = 0;
@@ -373,8 +369,8 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		hdc = GetDC(hwnd);
 		iPixelFormat = ChoosePixelFormat(hdc, &pfd);
 		SetPixelFormat(hdc, iPixelFormat, &pfd);
-		hgl=wglCreateContext(hdc);
-		wglMakeCurrent(hdc,hgl);
+		hgl = wglCreateContext(hdc);
+		wglMakeCurrent(hdc, hgl);
 		glClearColor(0, 0.75, 0, 0);
 		break;
 	case WM_SIZE:
@@ -425,7 +421,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 		glTranslated(-bikeRadius, 0, 0);
 		glTranslated(0, 0.2, 0);
 		glRotated(-90, 0, 1, 0);
-		drawBike(0, 0, 0, w, h,bikeFrontAngle,bikeBackAngle);
+		drawBike(0, 0, 0, w, h, bikeFrontAngle, bikeBackAngle);
 		glPopMatrix();
 
 		glFlush();
